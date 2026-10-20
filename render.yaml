@@ -1,0 +1,14 @@
+# Render Blueprint: New > Blueprint > pick this repo
+services:
+  - type: web
+    name: readymade-museum
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    # Image generation can take 30+ seconds; gunicorn's default timeout is 30
+    startCommand: gunicorn app:app --timeout 240
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false   # entered by hand in the Render dashboard, never committed
+      - key: PYTHON_VERSION
+        value: 3.12.7
