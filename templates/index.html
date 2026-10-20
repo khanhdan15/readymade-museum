@@ -4,76 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Readymade Institute</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <header class="masthead">
         <a class="institution" href="/">The Readymade Institute</a>
-        <span class="hours">Acquisitions open daily · Admission free</span>
+        <span class="room-name">Room 1 · Recent acquisitions</span>
     </header>
 
-    <main>
-        <section class="intake" id="intake">
-            <h1>Everything in your pocket is already art.<br><em>It only needs a label.</em></h1>
-            <p class="lede">Describe an ordinary object from your pocket, bag or desk. Our curator will write its museum label,
-                and our photographer will document it on display.</p>
+    <main class="room">
+        <!-- The wall: an empty frame until a work is installed -->
+        <figure class="wall" id="wall">
+            <div class="frame empty" id="frame">
+                <p class="frame-text" id="frame-text">This wall is waiting for your object.</p>
+            </div>
+        </figure>
 
-            <form id="acquire-form">
-                <label for="object" class="field-label">The object</label>
-                <textarea id="object" name="object" rows="3" maxlength="400" required
+        <!-- Beside the wall: first a blank accession card (the form), then the museum label -->
+        <div class="label-column">
+            <form class="card" id="acquire-form">
+                <p class="card-kicker">Accession form</p>
+                <label for="object" class="card-title">Describe an ordinary object from your pocket, bag or desk.</label>
+                <textarea id="object" name="object" rows="4" maxlength="400" required
                           placeholder="e.g. a ChapStick with the cap missing, a bit of lint stuck to the top"></textarea>
-                <div class="examples">
-                    <span>Try:</span>
-                    <button type="button" class="example">a crumpled STM transfer ticket from last winter</button>
-                    <button type="button" class="example">a hair elastic wrapped twice around a blue Bic pen</button>
-                    <button type="button" class="example">a half-eaten granola bar, still in its wrapper</button>
-                </div>
+                <p class="examples">Or try:
+                    <button type="button" class="example">a crumpled STM transfer from last winter</button>,
+                    <button type="button" class="example">a hair elastic wrapped around a blue Bic pen</button>,
+                    <button type="button" class="example">a half-eaten granola bar in its wrapper</button>
+                </p>
 
-                <label for="setting" class="field-label">Exhibition setting</label>
+                <label for="setting" class="card-kicker">Setting</label>
                 <select id="setting" name="setting">
                     <option value="auto">Let the curator decide</option>
-                    <option value="white_cube">White cube gallery</option>
+                    <option value="white_cube">White cube</option>
                     <option value="vitrine">Museum vitrine</option>
-                    <option value="plinth">Lone plinth under a spotlight</option>
+                    <option value="plinth">Lone plinth, spotlight</option>
                     <option value="pavilion">Biennale pavilion</option>
                 </select>
 
-                <button type="submit" id="submit">Acquire for the collection</button>
+                <button type="submit" id="submit">Accession</button>
                 <p class="form-error" id="form-error" role="alert"></p>
             </form>
-        </section>
 
-        <section class="room" id="room" hidden>
-            <figure class="work" id="work">
-                <div class="image-frame" id="image-frame">
-                    <p class="status" id="image-status">Waiting for the label…</p>
-                </div>
-            </figure>
+            <aside class="card wall-label" id="wall-label" aria-live="polite" hidden></aside>
 
-            <aside class="wall-label" id="wall-label" aria-live="polite">
-                <p class="status">The curator is writing the label…</p>
-            </aside>
+            <button type="button" class="again" id="again" hidden>Accession another object</button>
+        </div>
 
-            <details class="notes" id="notes" hidden>
-                <summary>Curatorial notes: how the image was made</summary>
-                <p>The photographer never read your description, only the wall label beside the work.</p>
-                <dl>
-                    <dt>Scale (from the dimensions)</dt><dd id="note-scale"></dd>
-                    <dt>Setting</dt><dd id="note-setting"></dd>
-                    <dt>Image prompt</dt><dd id="note-prompt"></dd>
-                </dl>
-            </details>
-
-            <button type="button" class="again" id="again">Acquire another object</button>
-        </section>
+        <details class="notes" id="notes" hidden>
+            <summary>Curatorial notes: how the image was made</summary>
+            <p>The photographer never read your description, only the wall label.</p>
+            <dl>
+                <dt>Scale, read from the dimensions</dt><dd id="note-scale"></dd>
+                <dt>Setting</dt><dd id="note-setting"></dd>
+                <dt>Image prompt</dt><dd id="note-prompt"></dd>
+            </dl>
+        </details>
     </main>
 
     <footer>
-        All artists, theorists and institutions in this museum are invented by a language model.
-        Labels: OpenAI Responses API · Images: OpenAI Images API.
+        All artists, theorists and institutions here are invented by a language model.
+        Labels: OpenAI Responses API. Images: OpenAI Images API.
     </footer>
 
     <script src="{{ url_for('static', filename='app.js') }}"></script>

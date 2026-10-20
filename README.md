@@ -21,6 +21,8 @@ your description ──► (1) curator: wall label ──► (2) art director: i
 
 The label and the image are two separate requests, so the label appears on the wall while the photo is still being made.
 
+The design is minimal and in Helvetica, like a real wall label. The twist is that the whole page is the gallery wall: the form is a blank accession card next to an empty frame, and it turns into the museum label once the object is acquired.
+
 ## International Art English: features and prompt rules
 
 I based the rules on what Rule & Levine (2012) found when they compared e-flux press releases with ordinary British English. The developer prompt in `museum.py` has six numbered rules that the machine always follows. Rule 2 lists the IAE features it has to use and exaggerate:
@@ -59,11 +61,14 @@ You can see the scale, the setting and the full image prompt under **Curatorial 
 
 ## User guide
 
-1. Open the app and describe one object in the text box: what it is, plus a few small details like colour, brand, wear, or where you found it. Details make better labels. You can also click one of the example objects.
-2. Choose an **exhibition setting**, or leave it on "Let the curator decide".
-3. Click **Acquire for the collection**. The wall label appears after a few seconds. The installation photo takes about 30 seconds more.
-4. Read the label beside the work. Open **Curatorial notes** to see how the image prompt was written from the label.
-5. Click **Acquire another object** to start again.
+The page is a gallery wall. On the left is an empty frame. On the right is a blank **accession form**, the card where a museum records a new work.
+
+1. In the accession form, describe one object from your pocket, bag or desk. Say what it is and add a few small details like colour, brand, wear, or where you found it. Details make better labels. You can also click one of the example objects.
+2. Choose a **setting**, or leave it on "Let the curator decide".
+3. Click **Accession**. After a few seconds the card turns into the museum label. The photo of the work installed in the exhibition appears in the frame about 30 seconds later.
+4. The red dot next to the title means the work has been acquired, like the sticker galleries use for sold works. Each work also gets an accession number.
+5. Open **Curatorial notes** under the work to see the scale, the setting, and the image prompt that was written from the label.
+6. Click **Accession another object** to empty the wall and start again.
 
 Notes: descriptions are limited to 400 characters, and each visitor can make 8 acquisitions every 15 minutes, so the public link doesn't use up the API credit. On Render's free plan, the first visit after a quiet period can take about a minute while the server wakes up.
 

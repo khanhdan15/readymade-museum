@@ -7,23 +7,17 @@ const objectField = document.getElementById("object");
 const settingField = document.getElementById("setting");
 const submitButton = document.getElementById("submit");
 const formError = document.getElementById("form-error");
-const room = document.getElementById("room");
 const wallLabel = document.getElementById("wall-label");
-const imageFrame = document.getElementById("image-frame");
+const frame = document.getElementById("frame");
+const againButton = document.getElementById("again");
 const notes = document.getElementById("notes");
 
-// Example chips fill the text field
+// Example objects fill the text field
 document.querySelectorAll(".example").forEach((chip) => {
     chip.addEventListener("click", () => {
         objectField.value = chip.textContent;
         objectField.focus();
     });
-});
-
-document.getElementById("again").addEventListener("click", () => {
-    objectField.value = "";
-    document.getElementById("intake").scrollIntoView({ behavior: "smooth" });
-    objectField.focus();
 });
 
 async function post(url, body) {
@@ -38,7 +32,7 @@ async function post(url, body) {
     return data;
 }
 
-// Small helper: build an element with text (never innerHTML, so nothing the model writes can inject HTML)
+// Build an element with text. Never innerHTML, so nothing the model writes can inject HTML.
 function el(tag, className, text) {
     const node = document.createElement(tag);
     if (className) node.className = className;
@@ -48,9 +42,9 @@ function el(tag, className, text) {
 
 // The extended label cites the book in *asterisks*: show that part in italics
 function withItalics(text) {
-    const p = el("p", "extended");
+    const p = el("p");
     text.split(/(\*[^*]+\*)/).forEach((part) => {
-        if (part.startsWith("*") && part.endsWith("*") && part.length > 2) {
+        if (part.length > 2 && part.startsWith("*") && part.endsWith("*")) {
             p.appendChild(el("i", null, part.slice(1, -1)));
         } else {
             p.appendChild(document.createTextNode(part));
@@ -59,29 +53,66 @@ function withItalics(text) {
     return p;
 }
 
+// Accession numbers count up in this browser: 2026.0001, 2026.0002, ...
+function nextAccessionNumber() {
+    let n;
+    try {
+        n = Number(localStorage.getItem("accessions") || 0) + 1;
+        localStorage.setItem("accessions", n);
+    } catch (e) {
+        n = Math.floor(Math.random() * 9000) + 1000;
+    }
+    return `Acc. no. ${new Date().getFullYear()}.${String(n).padStart(4, "0")}`;
+}
+
 function showLabel(label) {
     const t = label.tombstone;
-    const title = el("p", "title");
+    const titleRow = el("div", "title-row");
+    const title = el("p");
     title.appendChild(el("i", null, t.title));
     title.appendChild(document.createTextNode(`, ${t.year}`));
+    const dot = el("span", "dot");
+    dot.title = "Acquired";
+    titleRow.append(title, dot);
 
     wallLabel.replaceChildren(
         el("p", "artist", t.artist_name),
         el("p", "bio", t.artist_bio),
-        title,
+        titleRow,
         el("p", null, t.medium),
         el("p", null, t.dimensions),
         el("p", "gap", `Provenance: ${t.provenance}`),
-        el("p", "gap credit", t.credit_line),
+        el("p", "gap muted", t.credit_line),
         el("hr"),
         withItalics(label.extended_label),
+        el("p", "accession", nextAccessionNumber()),
     );
 }
 
-function showStatus(container, message, isError = false) {
-    container.classList.toggle("loading", !isError);
-    container.replaceChildren(el("p", isError ? "status error" : "status", message));
+function labelStatus(message, isError = false) {
+    wallLabel.replaceChildren(el("p", isError ? "status error" : "status working", message));
 }
+
+function wallStatus(message, isError = false) {
+    frame.classList.add("empty");
+    frame.replaceChildren(el("p", isError ? "frame-text error" : "frame-text working", message));
+}
+
+function resetRoom() {
+    form.hidden = false;
+    wallLabel.hidden = true;
+    againButton.hidden = true;
+    notes.hidden = true;
+    notes.open = false;
+    wallStatus("This wall is waiting for your object.");
+    frame.querySelector(".frame-text").classList.remove("working");
+}
+
+againButton.addEventListener("click", () => {
+    resetRoom();
+    objectField.value = "";
+    objectField.focus();
+});
 
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -93,41 +124,40 @@ form.addEventListener("submit", async (event) => {
     }
 
     submitButton.disabled = true;
-    submitButton.textContent = "Acquiring…";
-    notes.hidden = true;
-    room.hidden = false;
-    showStatus(wallLabel, "The curator is writing the label");
-    showStatus(imageFrame, "Waiting for the label");
-    room.scrollIntoView({ behavior: "smooth" });
+    submitButton.textContent = "Accessioning…";
 
     try {
-        // Step 1: the label
+        // Step 1: the label. The accession card turns into the wall label.
+        form.hidden = true;
+        wallLabel.hidden = false;
+        labelStatus("The curator is writing the label");
+        wallStatus("Waiting for the label");
         const { label } = await post("/api/label", { object: description });
         showLabel(label);
 
         // Step 2: the image, from the label
-        showStatus(imageFrame, "The photographer is installing the work (about 30 seconds)");
+        wallStatus("Installing the work, about 30 seconds");
         const work = await post("/api/image", { label, setting: settingField.value });
         const img = new Image();
         img.src = work.image;
         img.alt = `Installation view of ${label.tombstone.title} by ${label.tombstone.artist_name}`;
-        imageFrame.classList.remove("loading");
-        imageFrame.replaceChildren(img);
+        frame.classList.remove("empty");
+        frame.replaceChildren(img);
 
         document.getElementById("note-scale").textContent = work.scale;
         document.getElementById("note-setting").textContent = work.setting;
         document.getElementById("note-prompt").textContent = work.image_prompt;
         notes.hidden = false;
     } catch (error) {
-        // Show the error where the missing piece should be
         if (wallLabel.querySelector(".artist")) {
-            showStatus(imageFrame, error.message, true);
+            wallStatus(error.message, true);           // label worked, image failed
         } else {
-            showStatus(wallLabel, error.message, true);
-            showStatus(imageFrame, "No work to install.", true);
+            labelStatus(error.message, true);          // label failed
+            wallStatus("Nothing was installed.", true);
         }
     } finally {
+        againButton.hidden = false;
         submitButton.disabled = false;
-        submitButton.textContent = "Acquire for the collection";
+        submitButton.textContent = "Accession";
     }
 });
