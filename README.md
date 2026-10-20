@@ -21,7 +21,7 @@ your description ──► (1) curator: wall label ──► (2) art director: i
 
 The label and the image are two separate requests, so the label appears on the wall while the photo is still being made.
 
-The design is minimal and in Helvetica, like a real wall label. The twist is that the whole page is the gallery wall: the form is a blank accession card next to an empty frame, and it turns into the museum label once the object is acquired.
+The design is minimal: Helvetica, a white background, rounded corners and a baby blue accent. The twist is that the whole page is the gallery wall: the form is a blank accession card next to an empty frame, and it turns into the museum label once the object is acquired. The rounded, softly filled boxes and the small flow diagram in the curatorial notes are borrowed from the style of the C04 slides (the "A server keeps the key secret" diagram), redrawn as *your description → wall label → installation photo*.
 
 ## International Art English: features and prompt rules
 

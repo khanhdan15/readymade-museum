@@ -1,10 +1,15 @@
 :root {
-    --wall: #f4f3ef;
-    --ink: #111;
-    --muted: #77756f;
-    --line: #d8d6cf;
-    --card: #fff;
-    --dot: #d6312b;           /* the red "acquired" sticker */
+    --bg: #ffffff;
+    --ink: #1a1d21;
+    --muted: #6b7480;
+    --line: #e3e8ee;
+    --blue: #89cff0;          /* baby blue accent */
+    --blue-dark: #6cbde6;     /* hover */
+    --blue-soft: #eef8fe;     /* soft fill, like the highlighted boxes in the C04 slides */
+    --blue-line: #bfe3f6;
+    --blue-ink: #0f3b55;      /* text on baby blue, dark enough to read */
+    --dot: #e0453c;           /* the red "acquired" sticker */
+    --radius: 14px;
     --helvetica: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
@@ -12,7 +17,7 @@
 
 body {
     margin: 0;
-    background: var(--wall);
+    background: var(--bg);
     color: var(--ink);
     font-family: var(--helvetica);
     font-size: 15px;
@@ -30,20 +35,29 @@ button, select, textarea { font-family: inherit; font-size: inherit; color: inhe
     flex-wrap: wrap;
     gap: 6px;
     padding: 22px clamp(16px, 4vw, 48px);
+    border-bottom: 1px solid var(--line);
 }
 .institution { font-weight: 700; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; }
+.institution::before {
+    content: "";
+    display: inline-block;
+    width: 10px; height: 10px;
+    margin-right: 8px;
+    border-radius: 50%;
+    background: var(--blue);
+}
 .room-name { color: var(--muted); font-size: 13px; }
 
 /* ---------- the room: wall on the left, label beside it ---------- */
 .room {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 320px;
-    gap: clamp(24px, 4vw, 64px);
+    grid-template-columns: minmax(0, 1fr) 330px;
+    gap: clamp(24px, 4vw, 56px);
     align-items: end;
     max-width: 1320px;
     margin: 0 auto;
     padding: clamp(16px, 4vw, 48px);
-    min-height: calc(100vh - 140px);
+    min-height: calc(100vh - 150px);
 }
 
 .wall { margin: 0; align-self: center; }
@@ -52,9 +66,10 @@ button, select, textarea { font-family: inherit; font-size: inherit; color: inhe
     display: grid;
     place-items: center;
     overflow: hidden;
-    background: #ebe9e3;
+    border-radius: var(--radius);
+    background: #f4f7fa;
 }
-.frame.empty { background: transparent; border: 1px dashed #c4c1b8; }
+.frame.empty { background: #fafcfe; border: 1.5px dashed var(--blue-line); }
 .frame img { width: 100%; height: 100%; object-fit: cover; display: block; animation: hang 0.8s ease-out; }
 @keyframes hang { from { opacity: 0; } to { opacity: 1; } }
 .frame-text { color: var(--muted); font-size: 13px; text-align: center; padding: 16px; margin: 0; }
@@ -63,12 +78,14 @@ button, select, textarea { font-family: inherit; font-size: inherit; color: inhe
 @keyframes dots { 0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; } }
 
 /* ---------- cards: the accession form and the wall label share one shape ---------- */
-.label-column { display: flex; flex-direction: column; gap: 16px; }
+.label-column { display: flex; flex-direction: column; gap: 14px; }
 .card {
-    background: var(--card);
+    background: var(--bg);
     padding: 22px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04), 0 6px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
 }
+form.card { background: var(--blue-soft); border-color: var(--blue-line); }
 
 .card-kicker {
     display: block;
@@ -77,37 +94,49 @@ button, select, textarea { font-family: inherit; font-size: inherit; color: inhe
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
+    color: var(--blue-ink);
 }
 .card-title { display: block; font-size: 15px; margin-bottom: 12px; }
 
 textarea, select {
     width: 100%;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid var(--ink);
-    border-radius: 0;
-    padding: 6px 0;
+    background: var(--bg);
+    border: 1px solid var(--blue-line);
+    border-radius: 10px;
+    padding: 10px 12px;
 }
-textarea { resize: vertical; min-height: 84px; }
+textarea { resize: vertical; min-height: 92px; }
 select { margin-bottom: 20px; cursor: pointer; }
-textarea:focus, select:focus { outline: none; border-bottom-width: 2px; }
-button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+textarea:focus, select:focus { outline: none; border-color: var(--blue-dark); box-shadow: 0 0 0 3px rgba(137, 207, 240, 0.35); }
+button:focus-visible { outline: 3px solid rgba(137, 207, 240, 0.6); outline-offset: 2px; }
 
-.examples { font-size: 12.5px; color: var(--muted); margin: 10px 0 22px; }
-.example { background: none; border: none; padding: 0; font-size: 12.5px; color: var(--ink); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+.examples { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12.5px; color: var(--muted); margin: 10px 0 22px; }
+.example {
+    background: var(--bg);
+    border: 1px solid var(--blue-line);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 12px;
+    color: var(--ink);
+    cursor: pointer;
+}
+.example:hover { border-color: var(--blue-dark); }
 
 #submit, .again {
     width: 100%;
     padding: 12px;
-    border: 1px solid var(--ink);
-    border-radius: 0;
-    background: var(--ink);
-    color: #fff;
+    border: 1px solid var(--blue);
+    border-radius: 12px;
+    background: var(--blue);
+    color: var(--blue-ink);
+    font-weight: 700;
     cursor: pointer;
+    transition: background 0.15s;
 }
-#submit:disabled { opacity: 0.45; cursor: wait; }
-.again { background: transparent; color: var(--ink); }
-.again:hover { background: var(--ink); color: #fff; }
+#submit:hover { background: var(--blue-dark); border-color: var(--blue-dark); }
+#submit:disabled { opacity: 0.55; cursor: wait; }
+.again { background: var(--bg); color: var(--blue-ink); border-color: var(--blue-line); }
+.again:hover { background: var(--blue-soft); }
 .form-error { color: var(--dot); font-size: 13px; min-height: 1.4em; margin: 10px 0 0; }
 
 /* ---------- the museum label ---------- */
@@ -126,19 +155,51 @@ button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .wall-label .gap { margin-top: 12px; }
 .wall-label .muted { color: var(--muted); }
 .wall-label hr { border: none; border-top: 1px solid var(--line); margin: 14px 0; }
-.wall-label .accession { margin-top: 14px; font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
+.wall-label .accession {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 3px 9px;
+    font-size: 11px;
+    color: var(--blue-ink);
+    background: var(--blue-soft);
+    border-radius: 999px;
+    letter-spacing: 0.03em;
+}
 .wall-label .status { color: var(--muted); }
 .wall-label .status.error { color: var(--dot); }
 
-/* ---------- notes ---------- */
+/* ---------- notes, with the label-to-image flow drawn like the C04 server diagram ---------- */
 .notes { grid-column: 1 / -1; font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 14px; }
-.notes summary { cursor: pointer; color: var(--ink); }
+.notes summary { cursor: pointer; color: var(--ink); font-weight: 700; }
 .notes dt { font-weight: 700; color: var(--ink); margin-top: 12px; }
 .notes dd { margin: 4px 0 0; max-width: 80ch; }
 
-footer { padding: 24px clamp(16px, 4vw, 48px); font-size: 11.5px; color: var(--muted); }
+.flow { display: flex; align-items: flex-start; gap: 10px; margin: 18px 0 8px; flex-wrap: wrap; }
+.flow-step { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.flow-box {
+    width: 190px;
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #c9ced6;
+    border-radius: 10px;
+    background: #f3f5f7;
+    color: var(--ink);
+}
+.flow-box b { display: block; font-size: 14px; }
+.flow-box span { font-size: 12px; color: var(--muted); }
+.flow-box.highlight { background: var(--blue-soft); border-color: var(--blue-dark); }
+.flow-caption { font-size: 12px; font-weight: 700; }
+.flow-caption.blue { color: #2a8fc0; }
+.flow-caption.red { color: var(--dot); }
+.flow-arrow { align-self: center; margin-top: -22px; color: #2a8fc0; font-size: 20px; }
+
+footer { padding: 24px clamp(16px, 4vw, 48px); font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--line); }
 
 /* ---------- phones: the label goes under the wall ---------- */
 @media (max-width: 820px) {
     .room { grid-template-columns: 1fr; min-height: 0; align-items: start; }
+    .flow { flex-direction: column; align-items: stretch; }
+    .flow-box { width: 100%; }
+    .flow-arrow { transform: rotate(90deg); margin: 0 auto; }
+    .flow-caption:not(.blue):not(.red) { display: none; }
 }

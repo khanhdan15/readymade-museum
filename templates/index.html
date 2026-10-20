@@ -28,11 +28,11 @@
                 <label for="object" class="card-title">Describe an ordinary object from your pocket, bag or desk.</label>
                 <textarea id="object" name="object" rows="4" maxlength="400" required
                           placeholder="e.g. a ChapStick with the cap missing, a bit of lint stuck to the top"></textarea>
-                <p class="examples">Or try:
-                    <button type="button" class="example">a crumpled STM transfer from last winter</button>,
-                    <button type="button" class="example">a hair elastic wrapped around a blue Bic pen</button>,
+                <div class="examples">Or try:
+                    <button type="button" class="example">a crumpled STM transfer from last winter</button>
+                    <button type="button" class="example">a hair elastic wrapped around a blue Bic pen</button>
                     <button type="button" class="example">a half-eaten granola bar in its wrapper</button>
-                </p>
+                </div>
 
                 <label for="setting" class="card-kicker">Setting</label>
                 <select id="setting" name="setting">
@@ -54,7 +54,22 @@
 
         <details class="notes" id="notes" hidden>
             <summary>Curatorial notes: how the image was made</summary>
-            <p>The photographer never read your description, only the wall label.</p>
+            <div class="flow" aria-label="Your description goes to the curator, who writes the label; the photographer reads only the label">
+                <div class="flow-step">
+                    <div class="flow-box"><b>Your description</b><span>what you typed</span></div>
+                    <span class="flow-caption">&nbsp;</span>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-box highlight"><b>Wall label</b><span>written by the curator</span></div>
+                    <span class="flow-caption blue">The image comes from here</span>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-box"><b>Installation photo</b><span>image prompt + Images API</span></div>
+                    <span class="flow-caption red">Never sees your words</span>
+                </div>
+            </div>
             <dl>
                 <dt>Scale, read from the dimensions</dt><dd id="note-scale"></dd>
                 <dt>Setting</dt><dd id="note-setting"></dd>
