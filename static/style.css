@@ -115,13 +115,13 @@ button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .wall-label p { margin: 0; }
 .wall-label .artist { font-weight: 700; font-size: 14px; }
 .wall-label .bio { color: var(--muted); margin-bottom: 12px; }
-.wall-label .title-row { display: flex; gap: 8px; align-items: baseline; }
 .wall-label .dot {
-    flex: none;
+    display: inline-block;
     width: 10px; height: 10px;
+    margin-left: 8px;
     border-radius: 50%;
     background: var(--dot);
-    transform: translateY(1px);
+    vertical-align: -1px;
 }
 .wall-label .gap { margin-top: 12px; }
 .wall-label .muted { color: var(--muted); }

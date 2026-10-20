@@ -67,18 +67,17 @@ function nextAccessionNumber() {
 
 function showLabel(label) {
     const t = label.tombstone;
-    const titleRow = el("div", "title-row");
     const title = el("p");
     title.appendChild(el("i", null, t.title));
     title.appendChild(document.createTextNode(`, ${t.year}`));
-    const dot = el("span", "dot");
+    const dot = el("span", "dot");      // red "acquired" sticker, right after the year
     dot.title = "Acquired";
-    titleRow.append(title, dot);
+    title.appendChild(dot);
 
     wallLabel.replaceChildren(
         el("p", "artist", t.artist_name),
         el("p", "bio", t.artist_bio),
-        titleRow,
+        title,
         el("p", null, t.medium),
         el("p", null, t.dimensions),
         el("p", "gap", `Provenance: ${t.provenance}`),
