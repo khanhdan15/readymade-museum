@@ -17,7 +17,7 @@ your description ──► (1) curator: wall label ──► (2) art director: i
 
 1. **The label.** The OpenAI Responses API (`client.responses.parse`, model `gpt-4.1`) writes the label as structured output. A Pydantic schema makes sure every tombstone field is there: artist and bio, title and year, medium, dimensions, provenance, credit line. Then the extended label follows, along with the invented theorist and their book.
 2. **The image prompt.** A second Responses API call receives **only the finished label**, never what the visitor typed, and writes the prompt for the image model.
-3. **The image.** The OpenAI Images API (`client.images.generate`, model `gpt-image-1`) returns the picture as base64 (`b64_json`). The server turns it into a `data:image/png;base64,...` URL that the browser can show directly.
+3. **The image.** The OpenAI Images API (`client.images.generate`, model `gpt-image-1`) returns the picture as base64 (`b64_json`), as a JPEG. The server turns it into a `data:image/jpeg;base64,...` URL that the browser can show directly.
 
 The label and the image are two separate requests, so the label appears on the wall while the photo is still being made.
 
@@ -114,7 +114,7 @@ mv .env-bup .env          # then put your OPENAI_API_KEY in .env
 python3 app.py            # open http://127.0.0.1:5000
 ```
 
-**Deploying on Render:** build command `pip install -r requirements.txt`, start command `gunicorn app:app --timeout 240` (both are already in `render.yaml`), and add `OPENAI_API_KEY` as an environment variable in the Render dashboard. The key is never in the code or the repo. Optional environment variables: `TEXT_MODEL`, `IMAGE_MODEL`, `IMAGE_QUALITY`, `RATE_LIMIT`.
+**Deploying on Render:** build command `pip install -r requirements.txt`, start command `gunicorn app:app --timeout 240` (both are already in `render.yaml`), and add `OPENAI_API_KEY` as an environment variable in the Render dashboard. The key is never in the code or the repo. Optional environment variables: `TEXT_MODEL`, `IMAGE_MODEL`, `IMAGE_QUALITY`, `IMAGE_FORMAT`, `RATE_LIMIT`.
 
 ## Reflection: why is a language model so fluent in this dialect?
 
